@@ -1,5 +1,5 @@
 {
-  "name": "Data Nadhi Dev (JS)",
+  "name": "Data Nadhi Dev",
   "build": {
 		"dockerfile": "Dockerfile"
 	},
