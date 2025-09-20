@@ -1,0 +1,26 @@
+{
+  "name": "Data Nadhi Dev (JS)",
+  "build": {
+		"dockerfile": "Dockerfile"
+	},
+  "runArgs": ["--network=datanadhi-net"],
+  "workspaceFolder": "/workspaces/data-nadhi-dev",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "mongodb.mongodb-vscode",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "mounts": [
+		"source=${env:HOME}/.ssh,target=/home/node/.ssh,type=bind"
+	],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
+}

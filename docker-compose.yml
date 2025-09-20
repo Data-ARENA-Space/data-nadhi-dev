@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:7
+    container_name: datanadhi-mongo
+    ports:
+      - "27017:27017"
+
+  postgres:
+    image: postgres:16
+    container_name: datanadhi-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: datanadhi_dev
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: datanadhi-redis
+    ports:
+      - "6379:6379"
+
+networks:
+  default:
+    name: datanadhi-net

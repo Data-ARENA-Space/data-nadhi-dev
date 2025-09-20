@@ -1,0 +1,15 @@
+{
+  "name": "data-nadhi-dev",
+  "private": true,
+  "scripts": {
+    "mongo:migrate:up": "migrate-mongo up",
+    "mongo:migrate:down": "migrate-mongo down",
+    "pg:migrate": "node scripts/run-pg-migrations.js up",
+    "pg:rollback": "node scripts/run-pg-migrations.js down 1",
+    "pg:rollback:all": "node scripts/run-pg-migrations.js down"
+  },
+  "devDependencies": {
+    "migrate-mongo": "^10.0.0",
+    "pg": "^8.16.3"
+  }
+}
