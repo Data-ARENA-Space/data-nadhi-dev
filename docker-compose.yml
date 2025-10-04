@@ -4,6 +4,10 @@ services:
     container_name: datanadhi-mongo
     ports:
       - "27017:27017"
+    networks:
+      - datanadhi-net
+    volumes:
+      - ./data/mongo:/data/db
 
   postgres:
     image: postgres:16
@@ -14,38 +18,36 @@ services:
       POSTGRES_DB: datanadhi_dev
     ports:
       - "5432:5432"
+    networks:
+      - datanadhi-net
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
 
   redis:
     image: redis:7
     container_name: datanadhi-redis
     ports:
       - "6379:6379"
+    networks:
+      - datanadhi-net
+    volumes:
+      - ./data/redis:/data
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    container_name: datanadhi-zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+  minio:
+    image: minio/minio:latest
+    container_name: datanadhi-minio
     ports:
-      - "2181:2181"
-
-  kafka:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: datanadhi-kafka
-    depends_on:
-      - zookeeper
-    ports:
-      - "9092:9092"   # External clients (e.g., Node.js app)
-      - "29092:29092" # Internal containers
+      - "9000:9000"   # MinIO API
+      - "9001:9001"   # MinIO console
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: "datanadhi-zookeeper:2181"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://datanadhi-kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: server /data --console-address ":9001"
+    networks:
+      - datanadhi-net
+    volumes:
+      - ./data/minio:/data
 
 networks:
   datanadhi-net:
-    name: datanadhi-net
+    external: true

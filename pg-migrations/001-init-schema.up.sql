@@ -26,3 +26,14 @@ CREATE TABLE IF NOT EXISTS trace_nodes (
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (organisation_id, project_id, pipeline_id, trace_id, node_id)
 );
+
+CREATE TABLE IF NOT EXISTS queue_log (
+  message_id TEXT PRIMARY KEY,
+  file_key TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_queue_status_created 
+ON queue_log (status, created_at);
