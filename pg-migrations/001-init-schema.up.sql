@@ -28,12 +28,14 @@ CREATE TABLE IF NOT EXISTS trace_nodes (
 );
 
 CREATE TABLE IF NOT EXISTS queue_log (
-  message_id TEXT PRIMARY KEY,
+  processor TEXT,
+  message_id TEXT,
   file_key TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (file_key, message_id)
 );
 
 CREATE INDEX idx_queue_status_created 
-ON queue_log (status, created_at);
+ON queue_log (processor, status, created_at);

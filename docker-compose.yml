@@ -7,7 +7,8 @@ services:
     networks:
       - datanadhi-net
     volumes:
-      - ./data/mongo:/data/db
+      - mongo_data:/data/db
+    restart: unless-stopped
 
   postgres:
     image: postgres:16
@@ -16,12 +17,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: datanadhi_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     networks:
       - datanadhi-net
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   redis:
     image: redis:7
@@ -31,7 +34,8 @@ services:
     networks:
       - datanadhi-net
     volumes:
-      - ./data/redis:/data
+      - redis_data:/data
+    restart: unless-stopped
 
   minio:
     image: minio/minio:latest
@@ -46,7 +50,14 @@ services:
     networks:
       - datanadhi-net
     volumes:
-      - ./data/minio:/data
+      - minio_data:/data
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  postgres_data:
+  redis_data:
+  minio_data:
 
 networks:
   datanadhi-net:

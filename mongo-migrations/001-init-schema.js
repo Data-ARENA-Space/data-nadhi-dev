@@ -17,11 +17,27 @@ module.exports = {
       { pipelineId: 1, projectId: 1, organisationId: 1 },
       { unique: true }
     );
+
+    // Processors
+    await db.createCollection("Processors");
+    await db.collection("Processors").createIndex(
+      { processorId: 1 },
+      { unique: true }
+    );
+
+    // Queues
+    await db.createCollection("Queues");
+    await db.collection("Queues").createIndex(
+      { queueId: 1 },
+      { unique: true }
+    );
   },
 
   async down(db) {
     await db.collection("Organisations").drop();
     await db.collection("Projects").drop();
     await db.collection("Pipelines").drop();
+    await db.collection("Processors").drop();
+    await db.collection("Queues").drop();
   }
 };

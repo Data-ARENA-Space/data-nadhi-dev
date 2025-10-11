@@ -1,0 +1,47 @@
+{
+    "Organisations": [
+        {
+            "organisationId": "563985c1-f119-4118-84de-a3575595c0c6",
+            "organisationSecretEncrypted": "q98ZKgJetmasG9TpcT2NWGDBzlYqs8w5Gcn3JrkEcB7xLl+65ccb/6YqfeihUD4fZTwLtI1vzyaXEtBGlbaDvQ=="
+        }
+    ],
+    "Projects": [
+        {
+            "organisationId": "563985c1-f119-4118-84de-a3575595c0c6",
+            "projectId": "517782c7-9e6f-4991-9e57-2c7e43b71b92",
+            "projectSecretEncrypted": "iPjgp5W/7efGcPNJwmK3Di/6f9+F4qVuH5FE8fvmLa9tHt885w4DAWsxvNUYDEGh0J0B7Yczl9n+FfwwRiaS0Q=="
+        }
+    ],
+    "Pipelines": [
+        {
+            "organisationId": "563985c1-f119-4118-84de-a3575595c0c6",
+            "projectId": "517782c7-9e6f-4991-9e57-2c7e43b71b92",
+            "pipelineId": "9ac1bd20-07ee-41ec-89fb-66c0ec642f5b",
+            "pipelineCode": "something-is-right",
+            "active": true
+        }
+    ],
+    "Processors": [
+        {
+            "processorId": "default",
+            "config": {
+                "queueId": "default"
+            }
+        }
+    ],
+    "Queues": [
+        {
+            "queueId": "default",
+            "encryptedCreds": {
+                "fileStorage": {
+                    "type": "minio",
+                    "encryptedCreds": "P75ujizRKFHUJaT5vd33QO/NgVBljmXf0AGmChonTKC7PFoxo8SlF5aUX6ETTRXFTMP7jQlltPlh+/3VEf/Mo12X1l9qCFqbxj8b+yyPELt4nq5bopPSFPIwF6759fjmYg+3kuzBtZqVNGtCXEPNcokoojEu6vQJbEBXlrVh/WzhalXg6rJdsGwITSfx/fdjH8W5Ph5V4KI="
+                },
+                "database": {
+                    "type": "pg",
+                    "encryptedCreds": "j0zXZIyFj/hUtPHgiLItCMIaH/wQTCtDO/f4iPzy9vMGphsJ4vEe5tPNq9DlgUnIT+x7WPZpn2MTkh5xLiF3oo7JFdADefRoWxe7QR0hJQdKDTOGK3jqC8ZFMCOdpLKRl9/W1EJgghGdOhaxkvi7czfRTrdwpZwmURD1p8rth9x6Q3BFJndxsg=="
+                }
+            }
+        }
+    ]
+}
