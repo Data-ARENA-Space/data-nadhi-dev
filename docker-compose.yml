@@ -1,4 +1,7 @@
 services:
+  # ----------------------------------
+  # Core Application Databases/Services
+  # ----------------------------------
   mongo:
     image: mongo:7
     container_name: datanadhi-mongo
@@ -37,27 +40,87 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
-  minio:
-    image: minio/minio:latest
-    container_name: datanadhi-minio
-    ports:
-      - "9000:9000"   # MinIO API
-      - "9001:9001"   # MinIO console
+  # ----------------------------------
+  # Temporal Infrastructure
+  # ----------------------------------
+
+  temporal-postgres:
+    image: postgres:16
+    container_name: temporal-postgres
+    platform: linux/arm64/v8
     environment:
-      MINIO_ROOT_USER: minio
-      MINIO_ROOT_PASSWORD: minio123
-    command: server /data --console-address ":9001"
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal
+      POSTGRES_DB: temporal
+    ports:
+      - "5433:5432"
     networks:
       - datanadhi-net
     volumes:
-      - minio_data:/data
+      - temporal_pg_data:/var/lib/postgresql/data
+      - ./init-temporal-db.sh:/docker-entrypoint-initdb.d/init-temporal-db.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal -d temporal"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: unless-stopped
 
+  temporal:
+    image: temporalio/auto-setup:latest
+    container_name: datanadhi-temporal
+    platform: linux/amd64
+    environment:
+      - DB=postgres12
+      - POSTGRES_SEEDS=temporal-postgres
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - DBNAME=temporal
+      - VISIBILITY_DBNAME=temporal_visibility
+    ports:
+      - "7233:7233"
+    networks:
+      - datanadhi-net
+    depends_on:
+      temporal-postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: 
+      - -c
+      - |
+        # Simple TCP wait since psql is not available
+        until nc -z temporal-postgres 5432; do
+          echo "Waiting for PostgreSQL..."
+          sleep 2
+        done
+        echo "PostgreSQL is up - starting Temporal"
+        exec /etc/temporal/entrypoint.sh
+
+  temporal-web:
+    image: temporalio/web:latest
+    container_name: datanadhi-temporal-web
+    platform: linux/amd64
+    environment:
+      TEMPORAL_GRPC_ENDPOINT: temporal:7233
+      TEMPORAL_PERMIT_WRITE_API: "true"
+    ports:
+      - "8088:8088"
+    networks:
+      - datanadhi-net
+    depends_on:
+      - temporal
+    restart: unless-stopped
+
+
+# ----------------------------------
+# Volumes & Networks
+# ----------------------------------
 volumes:
   mongo_data:
   postgres_data:
   redis_data:
-  minio_data:
+  temporal_pg_data:
 
 networks:
   datanadhi-net:
