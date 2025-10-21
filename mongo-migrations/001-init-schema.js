@@ -24,6 +24,20 @@ module.exports = {
       { nodeId: 1, pipelineId: 1, projectId: 1, organisationId: 1 },
       { unique: true }
     );
+
+    // Integration Connector
+    await db.createCollection("IntegrationConnectors");
+    await db.collection("IntegrationConnectors").createIndex(
+      { connectorId: 1, projectId: 1, organisationId: 1 },
+      { unique: true }
+    )
+
+    // Integration Target
+    await db.createCollection("IntegrationTargets");
+    await db.collection("IntegrationTargets").createIndex(
+      { targetId: 1, pipelineId: 1, projectId: 1, organisationId: 1 },
+      { unique: true }
+    )
   },
 
   async down(db) {
@@ -31,5 +45,7 @@ module.exports = {
     await db.collection("Projects").drop();
     await db.collection("Pipelines").drop();
     await db.collection("PipelineNodes").drop();
+    await db.collection("IntegrationConnectors").drop();
+    await db.collection("IntegrationTargets").drop();
   }
 };
