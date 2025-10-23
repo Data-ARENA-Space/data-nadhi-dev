@@ -1,109 +1,42 @@
-# data-nadhi-dev
+# Data Nadhi Dev
 
-Dev Setup for local development with MongoDB and PostgreSQL databases.
+Development infrastructure for Data Nadhi.
 
-## Prerequisites
+## Description
 
-- Docker and Docker Compose
-- Node.js
-- VS Code with Dev Containers extension
+This repository contains the complete development environment setup including:
+- Docker Compose configuration for all Data Nadhi services (MongoDB, PostgreSQL, Redis, MinIO, Temporal)
+- Database migration scripts for MongoDB and PostgreSQL
+- Service initialization scripts
+- Sample data for testing
 
-## Services
+## Dev Container
 
-The development environment requires these services running on your host machine:
+This repository includes a dev container configuration with all required dependencies pre-configured.
 
-- MongoDB (v7) - Managed via docker-compose
-- PostgreSQL (v16) - Managed via docker-compose
-- Redis (v7) - Managed via docker-compose
+**To use:**
+1. Open the repository in VS Code
+2. Click "Reopen in Container" when prompted
+3. All development tools will be available
 
-The dev container will connect to these services through the Docker network `datanadhi-net`. The services must be started using docker-compose on your host machine before launching the dev container.
+## Starting Services
 
-## Getting Started
+```bash
+docker-compose up -d
+```
 
-1. Clone the repository:
-   ```bash
-   git clone git@github.com:Data-ARENA-Space/data-nadhi-dev.git
-   cd data-nadhi-dev
-   ```
-
-2. Start the database services from your host machine:
-   ```bash
-   docker-compose up -d
-   ```
-   This will start MongoDB, PostgreSQL, and Redis services. These must be started from your host machine, not from within the dev container.
-
-3. Open in VS Code with Dev Containers:
-   - Open VS Code
-   - Install the "Dev Containers" extension if you haven't already
-   - Open the command palette (F1 or Ctrl/Cmd + Shift + P)
-   - Select "Dev Containers: Open Folder in Container"
-   - Select the cloned repository folder
-
-4. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-Note: The database services (MongoDB, PostgreSQL, Redis) must be running on your host machine before starting the dev container. The dev container will connect to these services through the Docker network.
+This starts all required services: MongoDB, PostgreSQL, Redis, MinIO, Temporal, and their UIs.
 
 ## Database Migrations
 
-### PostgreSQL Migrations
+```bash
+# MongoDB migrations
+npm run mongo:migrate:up
 
-- Run migrations:
-  ```bash
-  npm run pg:migrate
-  ```
-
-- Rollback last migration:
-  ```bash
-  npm run pg:rollback
-  ```
-
-- Rollback all migrations:
-  ```bash
-  npm run pg:rollback:all
-  ```
-
-### MongoDB Migrations
-
-- Run migrations:
-  ```bash
-  npm run mongo:migrate:up
-  ```
-
-- Rollback migrations:
-  ```bash
-  npm run mongo:migrate:down
-  ```
-
-## Database Connections
-
-When connecting to databases from within the dev container:
-
-- MongoDB: `mongodb://mongo:27017`
-- PostgreSQL: `postgresql://postgres:postgres@postgres:5432/datanadhi_dev`
-- Redis: `redis://redis:6379`
-
-## Project Structure
-
+# PostgreSQL migrations
+npm run pg:migrate
 ```
-├── docker-compose.yml      # Docker services configuration
-├── scripts/
-│   ├── init-mongo.js      # MongoDB initialization script
-│   ├── init-pg.js         # PostgreSQL initialization script
-│   └── run-pg-migrations-new.js  # PostgreSQL migration runner
-├── mongo-migrations/       # MongoDB migration files
-├── pg-migrations/         # PostgreSQL migration files (.up.sql & .down.sql)
-└── package.json
-```
-
-## Contributing
-
-1. Create a new branch for your feature
-2. Make your changes
-3. Create a pull request
 
 ## License
 
-TBD
+This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
