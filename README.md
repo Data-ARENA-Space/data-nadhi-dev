@@ -105,14 +105,6 @@ It uses **Docker Compose** to spin up all required infrastructure components, so
 
 ---
 
-### Build
-
-Build the static site for production:
-
-```bash
-npm run build
-```
-
 ## 🔗 Links
 
 - **Main Website**: [https://datanadhi.com](https://datanadhi.com)
